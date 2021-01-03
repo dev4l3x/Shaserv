@@ -11,6 +11,19 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Configuration\Configuration.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Configuration\settings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Configuration\Configuration.cs" />
+      <Resource Include="Configuration\settings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="System.Collections" Version="4.3.0" />
     </ItemGroup>
 

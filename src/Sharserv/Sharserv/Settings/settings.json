@@ -1,0 +1,10 @@
+{
+  "launch_port": 3000,
+  "mime_types": {
+    "application/javascript": [ "js", "jsonp" ],
+    "application/json": [ "json" ],
+    "text/html": [ "html", "htm" ],
+    "text/plain": [ "txt" ],
+    "application/pdf": [ "pdf" ]
+  }
+}

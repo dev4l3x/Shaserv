@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sharserv.Files;
 using Sharserv.Response;
+using Sharserv.Settings;
 
 namespace Sharserv.Request
 {
@@ -13,11 +14,10 @@ namespace Sharserv.Request
     {
         public HttpResponse Handle(HttpRequest request)
         {
-            var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var path = Path.Combine(documentsFolder, "Sharserv", request.RequestedResource);
+            var path = PathManager.GetPathForResource(request.RequestedResource);
             var resource = FileFinder.GetFileAt(path);
             //var rp = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
-            var contentType = new HttpHeader("Content-Type", "text/plain");
+            var contentType = new HttpHeader("Content-Type", resource.Type);
             var length = new HttpHeader("Content-Length", resource.Content.Length.ToString());
             var response = new HttpResponse("OK", 200, resource.Content, contentType, length);
             return response;
