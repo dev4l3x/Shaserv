@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Sharserv.Request
@@ -38,8 +39,20 @@ namespace Sharserv.Request
             }
         }
 
+        public string Content
+        {
+            get
+            {
+                return content;
+            }
+            set
+            {
+                content = value;
+            }
+        }
 
-        public HttpMessage(string content, params HttpHeader[] headers)
+
+        public HttpMessage(string content, IEnumerable<HttpHeader> headers)
         {
             this.content = content;
             this.headers = new List<HttpHeader>(headers);
@@ -97,21 +110,28 @@ namespace Sharserv.Request
 
             HttpRequest request = new HttpRequest();
 
-            var lines = httpRequest.Split("\r\n");
+            var lines = httpRequest.Split("\r\n\r\n", 2);
+
+            var headers = lines[0];
+            var contentLines = lines[1];
             var firstLine = lines[0].Split(" ");
             var method = firstLine[0];
             request.method = (Method)Enum.Parse(typeof(Method), method, true);
             request.requestedResource = firstLine[1].Remove(0, 1);
             request.httpVersion = firstLine[2];
 
-            for (int i = 1; i < lines.Length - 2; i++)
+            var splitedHeaders = headers.Split("\r\n");
+            for (int i = 1; i < splitedHeaders.Length; i++)
             {
-                var splittedLine = lines[i].Split(": ");
+                var splittedLine = splitedHeaders[i].Split(": ");
                 var headerName = splittedLine[0];
                 var headerValue = splittedLine[1];
                 var header = new HttpHeader(headerName, headerValue);
                 request.headers.Add(header);
             }
+
+            var eofIndex = contentLines.IndexOf('\0');
+            request.Content = lines.Last().Substring(0, eofIndex);
 
             return request;
         }
