@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Sharserv.Request
@@ -13,6 +14,7 @@ namespace Sharserv.Request
         public string Value { get; init; }
 
         public HttpHeader(string name, string value) => (Name, Value) = (name, value);
+
     }
     
     public enum Method

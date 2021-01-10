@@ -13,7 +13,6 @@ namespace Sharserv.Files
         private static readonly string _publicPath = "public";
         private static readonly string _serverDocumentsFolderName = "Sharserv";
 
-
         public static string DocumentsFolderPath => 
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
@@ -31,6 +30,11 @@ namespace Sharserv.Files
         public static string GetSettingsFilePath()
         {
             return Path.Combine(DocumentsFolderPath, _serverDocumentsFolderName, _settingsFileName);
+        }
+
+        public static string GetServerDocumentsFolder()
+        {
+            return Path.Combine(DocumentsFolderPath, _serverDocumentsFolderName);
         }
 
     }

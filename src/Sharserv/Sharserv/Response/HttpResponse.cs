@@ -30,5 +30,11 @@ namespace Sharserv.Response
             var response = new HttpResponse("Created", 201, string.Empty, new HttpHeader[0]);
             return response;
         }
+
+        public static HttpResponse GetOkResponse()
+        {
+            var response = new HttpResponse("OK", 200, string.Empty, new HttpHeader[0]);
+            return response;
+        }
     }
 }

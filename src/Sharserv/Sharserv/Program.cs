@@ -1,9 +1,11 @@
 ﻿using Sharserv.Request;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Sharserv.Files;
 using Sharserv.Settings;
 
 namespace Sharserv
@@ -33,11 +35,20 @@ namespace Sharserv
             var host = Dns.GetHostAddresses("localhost");
             var ip = host[1];
             var endpoint = new IPEndPoint(ip, 3000);
-
+            CreateFolders();
             s.Bind(endpoint);
             s.Listen(100);
 
             return s;
+        }
+
+        private static void CreateFolders()
+        {
+            if (!Directory.Exists(PathManager.GetServerDocumentsFolder()))
+            {
+                Directory.CreateDirectory(PathManager.GetServerDocumentsFolder());
+                Directory.CreateDirectory(PathManager.GetPublicFolderPath());
+            }
         }
 
         static void ProccessRequest(Socket handler) {

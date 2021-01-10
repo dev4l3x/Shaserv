@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sharserv.Files;
 using Sharserv.Response;
 
 namespace Sharserv.Request
@@ -11,7 +12,31 @@ namespace Sharserv.Request
     {
         public HttpResponse Handle(HttpRequest request)
         {
-            throw new NotImplementedException();
+            var path = PathManager.GetPathForResource(request.RequestedResource);
+            if (!System.IO.File.Exists(path))
+            {
+                throw new ArgumentException(
+                    "Resource does not exists in server");
+            }
+
+
+            FileDeleter.DeleteFileAt(path);
+            var stream = System.IO.File.OpenWrite(path);
+
+            try
+            {
+                stream.Write(Encoding.ASCII.GetBytes(request.Content));
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                stream.Close();
+            }
+
+            return HttpResponse.GetOkResponse();
         }
     }
 }
