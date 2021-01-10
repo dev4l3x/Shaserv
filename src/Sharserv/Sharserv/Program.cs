@@ -13,6 +13,17 @@ namespace Sharserv
     class Program
     {
 
+        public readonly static string defaultSettings = "{ \n" +
+            "\t\"launch_port\": 3000,\n" +
+            "\t\"mime_types\": { \n" +
+                "\t\t\"application/javascript\": [ \"js\", \"jsonp\" ], \n" +
+                "\t\t\"application/json\": [ \"json\" ], \n" +
+                "\t\t\"text/html\": [ \"html\", \"htm\" ], \n" +
+                "\t\t\"text/plain\": [ \"txt\" ], \n" +
+                "\t\t\"application/pdf\": [ \"pdf\" ] \n" +
+            "\t} \n" +
+        "}";
+
         static void Main(string[] args)
         {
             Socket s = StartServer();
@@ -48,6 +59,11 @@ namespace Sharserv
             {
                 Directory.CreateDirectory(PathManager.GetServerDocumentsFolder());
                 Directory.CreateDirectory(PathManager.GetPublicFolderPath());
+
+                var stream = System.IO.File.Create(PathManager.GetSettingsFilePath());
+                var encoded = Encoding.ASCII.GetBytes(defaultSettings);
+                stream.Write(encoded);
+                stream.Close();
             }
         }
 
@@ -64,11 +80,13 @@ namespace Sharserv
                 var responseString = response.ToString();
                 var enc = Encoding.ASCII.GetBytes(responseString);
                 handler.Send(enc);
-                handler.Close();
             }
             catch (Exception e)
             {
-
+                var response = ExceptionFactory.GetResponse(e);
+                var responseString = response.ToString();
+                var encoded = Encoding.ASCII.GetBytes(responseString);
+                handler.Send(encoded);
             }
             finally
             {

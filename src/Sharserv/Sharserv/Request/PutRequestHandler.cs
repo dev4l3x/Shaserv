@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Sharserv.Request
             var path = PathManager.GetPathForResource(request.RequestedResource);
             if (!System.IO.File.Exists(path))
             {
-                throw new ArgumentException(
+                throw new FileNotFoundException(
                     "Resource does not exists in server");
             }
 
