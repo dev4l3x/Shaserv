@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Sharserv.Request
     {
         public HttpResponse Handle(HttpRequest request)
         {
-            throw new NotImplementedException();
+            throw new FileNotFoundException();
         }
     }
 }
